@@ -59,7 +59,7 @@ export default function Home() {
 
               <div>
                 <a
-          href="https://github.com/thearchibold"
+          href="https://github.com/thearchibold/yenos-v2-backend.git"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -95,8 +95,8 @@ export default function Home() {
                  <div className={"col-sm"}>Gender:</div><div className={"col-sm"}> <b>{gender.predictions.gender}</b></div>
                 </div>
                 <div  className="row mt-4">
-                 <div className={"col-sm"}><div className={"col-sm"}>Female</div><div className={"col-sm"}> <b>{gender.predictions.confidence.FEMALE}</b></div></div>
                  <div className={"col-sm"}><div className={"col-sm"}>Male</div><div className={"col-sm"}> <b>{gender.predictions.confidence.MALE}</b></div></div>
+                 <div className={"col-sm"}><div className={"col-sm"}>Female</div><div className={"col-sm"}> <b>{gender.predictions.confidence.FEMALE}</b></div></div>
                 </div>
               </div>
               }
