@@ -77,9 +77,10 @@ export default function Home() {
                 </div>
               
                 <button type="submit" disabled={name.length === 0} className="btn btn-primary mt-2 mb-3">Predict</button>
-
                
             </form>
+                             <small  className="form-text text-muted"><b>Usage (GET) </b>{`https://yenos.herokuapp.com/api/v2/gender?name=${name}`}</small>
+
 
             
 
