@@ -1,53 +1,116 @@
+
+import {useState} from "react"
 import Head from 'next/head'
+// @ts-ignore
 import styles from '../styles/Home.module.css'
+import getGender from "./api/gender"
 
 export default function Home() {
+
+  const [loading, setLoading] = useState(false)
+  let [gender, setGender] = useState(null)
+  const  [name, setName] = useState("")
+
+
+  const handleNameInputChange = (e) => {
+    setName(e.target.value)
+  }
+
+  const makeGetGenderRequest = (e) => {
+    e.preventDefault()
+    if(name !== ""){
+      setLoading(true)
+      getGender(name).then(response => {
+      
+        const {error, predictions, gender} = response
+
+      if(!error){
+        setName("")
+        console.log(response)
+        setGender(response)
+        console.log(error, predictions)
+      }
+            setLoading(false)
+
+      })
+      
+    }
+  }
+
+  const Loader = () => {
+    return (
+      <div className={styles.ld_sellipsis}><div></div><div></div><div></div><div></div></div>
+    )
+  }
+
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Yenos AI</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+          <div className={styles.header}>
+              <div>
+                Yenos - v2.0.0
+              </div>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+              <div>
+                <a
+          href="https://github.com/thearchibold"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+                <i className="bi bi-github"></i> {" "}
+                <span className="ml-4">Github</span></a>
+              </div>
+          </div>
+          <div className={styles.body_container + " container"}>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+             <form  onSubmit={makeGetGenderRequest}>
+               <h4>Predict gender with first name</h4>
+                <div className="col form-group mt-4">
+                  <input type="text" value={name} className="form-control w-10 mt-2" onChange={handleNameInputChange} aria-describedby="Enter name" placeholder="First name"/>
+                  <small  className="form-text text-muted">e.g Archibold, Bernard etc.</small>
+                </div>
+              
+                <button type="submit" disabled={name.length === 0} className="btn btn-primary mt-2 mb-3">Predict</button>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+               
+            </form>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+            
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+            <div style={{height:"100px", display:"flex", alignItems:"flex-start"}}>
+              {loading &&  <Loader/>}
+              {
+                gender && !loading &&  
+                <div className={"container mt-2 card p-3"}>
+                <div  className="row">
+                 <div className={"col-sm"}>Name</div><div className={"col-sm"}> <b>{gender.name}</b></div>
+                </div>
+                <div  className="row mt-4">
+                 <div className={"col-sm"}>Gender:</div><div className={"col-sm"}> <b>{gender.predictions.gender}</b></div>
+                </div>
+                <div  className="row mt-4">
+                 <div className={"col-sm"}><div className={"col-sm"}>Female</div><div className={"col-sm"}> <b>{gender.predictions.confidence.FEMALE}</b></div></div>
+                 <div className={"col-sm"}><div className={"col-sm"}>Male</div><div className={"col-sm"}> <b>{gender.predictions.confidence.MALE}</b></div></div>
+                </div>
+              </div>
+              }
+            </div>
+            <div>
+          
+          
+            </div>
+            
+             
+          </div>
+
+
+       
       </main>
 
       <footer className={styles.footer}>
